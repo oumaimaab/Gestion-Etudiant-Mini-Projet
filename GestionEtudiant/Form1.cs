@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.FileIO;
+
 
 namespace GestionEtudiant
 {
@@ -28,6 +30,7 @@ namespace GestionEtudiant
         private void Form1_Load(object sender, EventArgs e)
         {
             panel2.Visible = false;
+            panel4.Visible = false;
             connexion = "Data Source =DESKTOP-3HPS76H\\SQLEXPRESS; Initial Catalog =GestionEtudiants ;Integrated Security = true";
             con = new SqlConnection(connexion);
             ListFiliere();
@@ -37,17 +40,65 @@ namespace GestionEtudiant
             {
                 listeCne.Items.Add(s.cne);
             }
-            CrystalReport1 crystal = new CrystalReport1();
+            fillReport();
+            chartFill();
+
+        }
+        private void importer_Click(object sender, EventArgs e)
+        {
+            panel4.Visible = true;
+        }
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.DefaultExt = ".csv";
+            DialogResult result = dlg.ShowDialog();
+            string filename = dlg.FileName;
+            textBox1.Text = filename;
+
+        }
+        public void chartFill()
+        {
+
+            var fils = from f in db.Filieres
+                       select f;
+            foreach (Filiere f in fils)
+            {
+                var nbEtdParFil = from etd in db.etudiants
+                                  where etd.id_fil == f.id_Filiere
+                                  select etd;
+                int nbEtd = 0;
+                foreach (etudiant etd in nbEtdParFil)
+                {
+                    nbEtd++;
+                }
+                chart1.Series["Nombre etudiants"].Points.AddXY(f.nom_Filiere, nbEtd);
+
+            }
+        }
+
+        public void fillReport()
+        {
+            CrystalReport1 cr1 = new CrystalReport1();
             DataSet ds = new DataSet();
-            var stu = from c in db.etudiants select c;
+            var x = from etd in db.etudiants
+                    select etd;
             DataTable dt = new DataTable();
             dt.TableName = "etudiants";
+            //dt = x as DataTable;
+
+
             SqlDataAdapter dap = new SqlDataAdapter();
             SqlCommand cmd = new SqlCommand("select * from etudiant", con);
+
             dap.SelectCommand = cmd;
             dap.Fill(dt);
             ds.Tables.Add(dt);
 
+            cr1.SetDataSource(ds.Tables["etudiants"]);
+            crystalReportViewer1.ReportSource = cr1;
+            crystalReportViewer1.Refresh();
         }
         public void ListFiliere()
         {
@@ -207,7 +258,10 @@ namespace GestionEtudiant
         private void chargerDonnees_Click_1(object sender, EventArgs e)
         {
             var x = from etd in db.etudiants
-                    select etd;
+                    join std in db.Filieres 
+                    on etd.id_fil equals std.id_Filiere 
+                    select new { etd.id_fil,etd.nom,etd.prenom,etd.sexe,etd.date_naiss,etd.adresse,etd.telephone,std.nom_Filiere} ;
+            
             etudiant e1 = x as etudiant;
             dataGridView2.DataSource = x;
         }
@@ -289,6 +343,112 @@ namespace GestionEtudiant
                 comboBox1.SelectedItem = f.nom_Filiere;
                 break;
             }
+        }
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+            panel4.Visible = false;
+        }
+        private DataTable GetDataTabletFromCSVFile(string csv_file_path)
+        {
+            DataTable csvData = new DataTable();
+            try
+            {
+                using (TextFieldParser csvReader = new TextFieldParser(csv_file_path))
+                {
+                    csvReader.SetDelimiters(";");
+                    csvReader.HasFieldsEnclosedInQuotes = true;
+                    string[] colFields = csvReader.ReadFields();
+                    foreach (string column in colFields)
+                    {
+                        DataColumn datecolumn = new DataColumn(column);
+                        datecolumn.AllowDBNull = true;
+                        /*Console.WriteLine(datecolumn.ToString());*/
+                        csvData.Columns.Add(datecolumn);
+                    }
+
+                    while (!csvReader.EndOfData)
+                    {
+                        string[] fieldData = csvReader.ReadFields();
+                        for (int i = 0; i < fieldData.Length; i++)
+                        {
+                            if (fieldData[i] == string.Empty)
+                            {
+                                fieldData[i] = string.Empty;
+                            }
+                            //Skip rows that have any csv header information or blank rows in them
+                            if (fieldData[0].Contains("Disclaimer") || string.IsNullOrEmpty(fieldData[0]))
+                            {
+                                continue;
+                            }
+                        }
+                        //Console.WriteLine(fieldData.ToString());
+                        csvData.Rows.Add(fieldData);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+            return csvData;
+        }
+
+        private void charger_Click_1(object sender, EventArgs e)
+        {
+            if (textBox1.Text.Equals(""))
+            {
+                MessageBox.Show("Veuillez séléctionner un fichier");
+            }
+            else
+            {
+                DataTable listeFromTheFile = GetDataTabletFromCSVFile(textBox1.Text);
+                foreach (DataRow dataRow in listeFromTheFile.Rows)
+                {
+                    int cne = Convert.ToInt32(dataRow.ItemArray.GetValue(0));
+                    String nom = dataRow.ItemArray.GetValue(1).ToString();
+                    String prenom = dataRow.ItemArray.GetValue(2).ToString();
+                    Char sexe = Convert.ToChar(dataRow.ItemArray.GetValue(3));
+                    String dateN = dataRow.ItemArray.GetValue(4).ToString();
+                    String adresse = dataRow.ItemArray.GetValue(5).ToString();
+                    String tel = dataRow.ItemArray.GetValue(6).ToString();
+                    int idFil = Convert.ToInt32(dataRow.ItemArray.GetValue(7));
+
+                    var x = (from etd in db.etudiants
+                             where etd.cne == cne
+                             select etd).SingleOrDefault();
+                    etudiant etdd = x as etudiant;
+                    if (etdd == null)
+                    {
+                        etudiant etd = new etudiant();
+                        etd.cne = cne;
+                        etd.date_naiss = dateN;
+                        etd.adresse = adresse;
+                        etd.sexe = sexe;
+                        etd.nom = nom;
+                        etd.prenom = prenom;
+                        etd.id_fil = idFil;
+                        etd.telephone = tel;
+                        db.etudiants.InsertOnSubmit(etd);
+                        db.SubmitChanges();
+                    }
+
+                }
+            }
+        }
+
+        private void importer_Click_1(object sender, EventArgs e)
+        {
+            panel4.Visible = true;
+        }
+
+        private void Browse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.DefaultExt = ".csv";
+            DialogResult result = dlg.ShowDialog();
+            string filename = dlg.FileName;
+            textBox1.Text = filename;
         }
     }
 }

@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.triDecroissant = new System.Windows.Forms.Button();
             this.triCroissant = new System.Windows.Forms.Button();
@@ -71,14 +74,21 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.dateN = new System.Windows.Forms.TextBox();
             this.listeCne = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.crystalReportViewer1 = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
             this.CrystalReport11 = new GestionEtudiant.CrystalReport1();
+            this.cachedCrystalReport11 = new GestionEtudiant.CachedCrystalReport1();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.charger = new System.Windows.Forms.Button();
+            this.Browse = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -87,6 +97,8 @@
             this.tabPage2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView2
@@ -162,6 +174,7 @@
             this.importer.TabIndex = 4;
             this.importer.Text = "Importer";
             this.importer.UseVisualStyleBackColor = true;
+            this.importer.Click += new System.EventHandler(this.importer_Click_1);
             // 
             // label13
             // 
@@ -307,11 +320,12 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.chart1);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage3.Size = new System.Drawing.Size(1358, 717);
+            this.tabPage3.Size = new System.Drawing.Size(1800, 865);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Statistique";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -349,7 +363,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1366, 750);
+            this.tabControl1.Size = new System.Drawing.Size(1808, 898);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -510,6 +524,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.panel4);
             this.tabPage2.Controls.Add(this.dataGridView2);
             this.tabPage2.Controls.Add(this.triDecroissant);
             this.tabPage2.Controls.Add(this.triCroissant);
@@ -525,7 +540,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage2.Size = new System.Drawing.Size(1358, 717);
+            this.tabPage2.Size = new System.Drawing.Size(1800, 865);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Etudiant";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -556,6 +571,14 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(529, 481);
             this.panel3.TabIndex = 2;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(201, 423);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(298, 28);
+            this.comboBox1.TabIndex = 19;
             // 
             // dateN
             // 
@@ -592,18 +615,10 @@
             this.tabPage4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage4.Size = new System.Drawing.Size(1358, 717);
+            this.tabPage4.Size = new System.Drawing.Size(1800, 865);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Reporting";
             this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(201, 423);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(298, 28);
-            this.comboBox1.TabIndex = 19;
             // 
             // crystalReportViewer1
             // 
@@ -614,19 +629,73 @@
             this.crystalReportViewer1.Location = new System.Drawing.Point(4, 5);
             this.crystalReportViewer1.Name = "crystalReportViewer1";
             this.crystalReportViewer1.ReportSource = this.CrystalReport11;
-            this.crystalReportViewer1.Size = new System.Drawing.Size(1350, 707);
+            this.crystalReportViewer1.Size = new System.Drawing.Size(1792, 855);
             this.crystalReportViewer1.TabIndex = 0;
+            // 
+            // chart1
+            // 
+            chartArea5.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chart1.Legends.Add(legend5);
+            this.chart1.Location = new System.Drawing.Point(124, 21);
+            this.chart1.Name = "chart1";
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Nombre etudiants";
+            this.chart1.Series.Add(series5);
+            this.chart1.Size = new System.Drawing.Size(1550, 662);
+            this.chart1.TabIndex = 0;
+            this.chart1.Text = "chart1";
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.textBox1);
+            this.panel4.Controls.Add(this.charger);
+            this.panel4.Controls.Add(this.Browse);
+            this.panel4.Location = new System.Drawing.Point(563, 315);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(675, 234);
+            this.panel4.TabIndex = 13;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(90, 89);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(357, 26);
+            this.textBox1.TabIndex = 2;
+            // 
+            // charger
+            // 
+            this.charger.Location = new System.Drawing.Point(258, 150);
+            this.charger.Name = "charger";
+            this.charger.Size = new System.Drawing.Size(189, 33);
+            this.charger.TabIndex = 1;
+            this.charger.Text = "Charger dans la base de donnée";
+            this.charger.UseVisualStyleBackColor = true;
+            this.charger.Click += new System.EventHandler(this.charger_Click_1);
+            // 
+            // Browse
+            // 
+            this.Browse.Location = new System.Drawing.Point(478, 83);
+            this.Browse.Name = "Browse";
+            this.Browse.Size = new System.Drawing.Size(175, 38);
+            this.Browse.TabIndex = 0;
+            this.Browse.Text = "Browse";
+            this.Browse.UseVisualStyleBackColor = true;
+            this.Browse.Click += new System.EventHandler(this.Browse_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1378, 785);
+            this.ClientSize = new System.Drawing.Size(1742, 880);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            this.tabPage3.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -639,6 +708,9 @@
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -694,5 +766,11 @@
         private CrystalDecisions.Windows.Forms.CrystalReportViewer crystalReportViewer1;
         private CrystalReport1 CrystalReport11;
         private System.Windows.Forms.ComboBox comboBox1;
+        private CachedCrystalReport1 cachedCrystalReport11;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button charger;
+        private System.Windows.Forms.Button Browse;
     }
 }
