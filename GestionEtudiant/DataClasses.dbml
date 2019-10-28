@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="GestionEtudiants" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-3HPS76H\SQLEXPRESS;Initial Catalog=GestionEtudiants;Integrated Security=True" SettingsObjectName="GestionEtudiant.Properties.Settings" SettingsPropertyName="GestionEtudiantsConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.etudiant" Member="etudiants">
+    <Type Name="etudiant">
+      <Column Name="cne" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="nom" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="prenom" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="sexe" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="date_naiss" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="adresse" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="telephone" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="id_fil" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Filiere_etudiant" Member="Filiere" ThisKey="id_fil" OtherKey="id_Filiere" Type="Filiere" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Filiere" Member="Filieres">
+    <Type Name="Filiere">
+      <Column Name="id_Filiere" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nom_Filiere" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Association Name="Filiere_etudiant" Member="etudiants" ThisKey="id_Filiere" OtherKey="id_fil" Type="etudiant" />
+    </Type>
+  </Table>
+</Database>
